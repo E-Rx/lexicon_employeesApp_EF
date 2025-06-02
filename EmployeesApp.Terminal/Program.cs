@@ -1,45 +1,95 @@
 ﻿using EmployeesApp.Application.Employees.Services;
 using EmployeesApp.Domain.Entities;
-using EmployeesApp.Infrastructure.Persistance;
-using Microsoft.EntityFrameworkCore;
 using EmployeesApp.Infrastructure.Persistance.Repositories;
+using EmployeesApp.Infrastructure.Persistance; // For ApplicationContext
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeesApp.Terminal;
+
 internal class Program
 {
-    static readonly EmployeeService employeeService = new(new EmployeeRepository(ApplicationContext context));
-
     static void Main(string[] args)
     {
+        // Configure Entity Framework
+        var options = new DbContextOptionsBuilder<ApplicationContext>()
+            .UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EmployeeDB;Trusted_Connection=True;")
+            .Options;
 
-        services.AddDbContext<ApplicationContext>(
-     o => o.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EmployeeDB;Trusted_Connection=True;"));
+        // Create context and service
+        using var context = new ApplicationContext(options);
+        var employeeRepository = new EmployeeRepository(context);
+        var employeeService = new EmployeeService(employeeRepository);
 
-        ListAllEmployees();
-        ListEmployee(562);
+        // Apply migrations automatically on startup
+        context.Database.Migrate();
+
+        // Execute tests
+        ListAllEmployees(employeeService);
+        ListEmployee(employeeService, 562);
+
+        // Example of adding a new employee
+        AddNewEmployee(employeeService);
+
+        // List again to see the new employee
+        Console.WriteLine("After adding new employee:");
+        ListAllEmployees(employeeService);
     }
 
-    private static void ListAllEmployees()
+    private static void ListAllEmployees(EmployeeService employeeService)
     {
-        foreach (var item in employeeService.GetAll())
-            Console.WriteLine(item.Name);
+        Console.WriteLine("=== ALL EMPLOYEES ===");
+        var employees = employeeService.GetAll();
 
+        if (!employees.Any())
+        {
+            Console.WriteLine("No employees found in database.");
+        }
+        else
+        {
+            foreach (var employee in employees)
+            {
+                Console.WriteLine($"{employee.Name}");
+            }
+        }
         Console.WriteLine("------------------------------");
     }
 
-    private static void ListEmployee(int employeeID)
+    private static void ListEmployee(EmployeeService employeeService, int employeeId)
     {
-        Employee? employee;
-
+        Console.WriteLine($"=== EMPLOYEE ID: {employeeId} ===");
         try
         {
-            employee = employeeService.GetById(employeeID);
+            var employee = employeeService.GetById(employeeId);
             Console.WriteLine($"{employee?.Name}: {employee?.Email}");
-            Console.WriteLine("------------------------------");
         }
         catch (ArgumentException e)
         {
             Console.WriteLine($"EXCEPTION: {e.Message}");
         }
+        Console.WriteLine("------------------------------");
+    }
+
+    private static void AddNewEmployee(EmployeeService employeeService)
+    {
+        // Optional: you can remove this method if you don't want to add employees automatically
+        Console.WriteLine("=== ADDING NEW EMPLOYEE (OPTIONAL) ===");
+        try
+        {
+            var newEmployee = new Employee
+            {
+                Name = "Test Employee",
+                Email = "test@company.com",
+                Salary = 50000.00m
+            };
+
+            // Check if your EmployeeService has an Add method
+            // employeeService.Add(newEmployee);
+            Console.WriteLine($"(Example of adding: {newEmployee.Name})");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error adding employee: {e.Message}");
+        }
+        Console.WriteLine("------------------------------");
     }
 }

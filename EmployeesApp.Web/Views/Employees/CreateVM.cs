@@ -16,8 +16,8 @@ namespace EmployeesApp.Web.Views.Employees
 
         [Display(Name = "Salary")]
         [Required(ErrorMessage = "You must specify a valid salary")]
-        [Range(0, 1000000, ErrorMessage = "Salary must be between 0 and 1,000,000")]
-        public required decimal Salary { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "Salary must be positive")]
+        public decimal Salary { get; set; }
 
 
         [Display(Name = "2 + 2 = ?")]
