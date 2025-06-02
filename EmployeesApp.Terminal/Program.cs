@@ -27,8 +27,6 @@ internal class Program
         ListAllEmployees(employeeService);
         ListEmployee(employeeService, 562);
 
-        // Example of adding a new employee
-        AddNewEmployee(employeeService);
 
         // List again to see the new employee
         Console.WriteLine("After adding new employee:");
