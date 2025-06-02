@@ -69,27 +69,6 @@ internal class Program
         Console.WriteLine("------------------------------");
     }
 
-    private static void AddNewEmployee(EmployeeService employeeService)
-    {
-        // Optional: you can remove this method if you don't want to add employees automatically
-        Console.WriteLine("=== ADDING NEW EMPLOYEE (OPTIONAL) ===");
-        try
-        {
-            var newEmployee = new Employee
-            {
-                Name = "Test Employee",
-                Email = "test@company.com",
-                Salary = 50000.00m
-            };
-
-            // Check if your EmployeeService has an Add method
-            // employeeService.Add(newEmployee);
-            Console.WriteLine($"(Example of adding: {newEmployee.Name})");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error adding employee: {e.Message}");
-        }
-        Console.WriteLine("------------------------------");
-    }
+    
+    
 }
