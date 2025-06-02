@@ -1,6 +1,7 @@
 ﻿using EmployeesApp.Application.Employees.Interfaces;
 using EmployeesApp.Domain.Entities;
 
+
 namespace EmployeesApp.Infrastructure.Persistance.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
