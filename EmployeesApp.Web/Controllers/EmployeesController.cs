@@ -1,5 +1,6 @@
 ﻿using EmployeesApp.Application.Employees.Interfaces;
 using EmployeesApp.Domain.Entities;
+using EmployeesApp.Infrastructure.Migrations;
 using EmployeesApp.Web.Models;
 using EmployeesApp.Web.Views.Employees;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,7 @@ public class EmployeesController(IEmployeeService service) : Controller
         {
             Name = viewModel.Name,
             Email = viewModel.Email,
+            Salary = viewModel.Salary,
         };
 
         service.Add(employee);
@@ -61,6 +63,7 @@ public class EmployeesController(IEmployeeService service) : Controller
             Id = model!.Id,
             Name = model.Name,
             Email = model.Email,
+            Salary = model.Salary,
         };
 
         return View(viewModel);
