@@ -1,14 +1,20 @@
 ﻿using EmployeesApp.Application.Employees.Services;
 using EmployeesApp.Domain.Entities;
+using EmployeesApp.Infrastructure.Persistance;
+using Microsoft.EntityFrameworkCore;
 using EmployeesApp.Infrastructure.Persistance.Repositories;
 
 namespace EmployeesApp.Terminal;
 internal class Program
 {
-    static readonly EmployeeService employeeService = new(new EmployeeRepository());
+    static readonly EmployeeService employeeService = new(new EmployeeRepository(ApplicationContext context));
 
     static void Main(string[] args)
     {
+
+        services.AddDbContext<ApplicationContext>(
+     o => o.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EmployeeDB;Trusted_Connection=True;"));
+
         ListAllEmployees();
         ListEmployee(562);
     }

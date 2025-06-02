@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace EmployeesApp.Infrastructure.Persistance.Repositories
 {
-    public class EmployeeRepository (ApplicationContext context) : IEmployeeRepository
+    public class EmployeeRepository (ApplicationContext context, object context1) : IEmployeeRepository
     {
         //readonly List<Employee> employees =
         //[
